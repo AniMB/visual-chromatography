@@ -1,3 +1,176 @@
 <!DOCTYPE html>
-fuajfjafja
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centered Text Design</title>
+<style>
+  :root {
+    --primary-color: #007bff;
+    --hover-color: #0056b3;
+    --error-color: #ff4136;
+    --error-hover-color: #c2302a;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --button-font-weight: bold;
+    --button-text-transform: uppercase;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .group-members, .results {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+
+  .process-indicator {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 15px;
+    justify-items: center;
+    padding: 20px;
+  }
+
+  .process-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .process-circle {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+  }
+
+  .process-circle:hover {
+    transform: scale(1.1);
+  }
+
+  .process-text {
+    margin-top: 8px;
+    color: var(--primary-color);
+    font-size: 0.8em;
+    text-align: center;
+  }
+
+  .button, .emergency-stop {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: var(--button-font-weight);
+    text-transform: var(--button-text-transform);
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 10px auto;
+  }
+
+  .button {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  .button:hover {
+    background-color: var(--hover-color);
+  }
+
+  .emergency-stop {
+    background-color: var(--error-color);
+    color: white;
+  }
+
+  .emergency-stop:hover {
+    background-color: var(--error-hover-color);
+  }
+
+  .results {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <input type="text" placeholder="Project title" style="font-size: 1.2em; padding: 10px;">
+  <img src="path-to-logo.png" alt="Logo" class="logo">
+</div>
+
+<div class="group-members">
+  <div>Member 1</div>
+  <div>Member 2</div>
+  <div>Member 3</div>
+</div>
+
+<div class="process-indicator">
+  <div class="process-unit">
+    <div class="process-circle"></div>
+    <span class="process-text">Saturation</span>
+  </div>
+  <div class="process-unit">
+    <div class="process-circle"></div>
+    <span class="process-text">Spray</span>
+  </div>
+  <div class="process-unit">
+    <div class="process-circle"></div>
+    <span class="process-text">Scan</span>
+  </div>
+  <div class="process-unit">
+    <div class="process-circle"></div>
+    <span class="process-text">Error/Completion</span>
+  </div>
+</div>
+
+<div class="button-container">
+  <button class="button" onclick="startStep()">Start Step</button>
+  <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button>
+</div>
+
+<div class="results">
+  <p>Results</p>
+</div>
+
+<script>
+  function startStep() {
+    console.log('Starting step...');
+  }
+  
+  function emergencyStop() {
+    console.log('Emergency stop activated!');
+  }
+</script>
+
+</body>
 </html>
