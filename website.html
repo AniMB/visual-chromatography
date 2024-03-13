@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Centered Text Design</title>
+<title>The Chemists</title>
+<link rel="icon" href="https://i.ibb.co/C9MKmqr/download.jpg" type="image/jpg">
 <style>
   :root {
     --primary-color: #007bff;
@@ -26,7 +27,8 @@
 
   .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    text-align: center;
     align-items: center;
     padding: 20px;
     background-color: #fff;
@@ -123,53 +125,57 @@
 </head>
 <body>
 
-<div class="header">
-  <input type="text" placeholder="Project title" style="font-size: 1.2em; padding: 10px;">
-  <img src="path-to-logo.png" alt="Logo" class="logo">
-</div>
+ <div class="header">
+  <h1 style="font-size: 1.2em; padding: 10px;"> Project Title
+</h1>
+ </div>
+
 
 <div class="group-members">
-  <div>Member 1</div>
-  <div>Member 2</div>
-  <div>Member 3</div>
+  <div>Rohann</div>
+  <div>Rohan</div>
+  <div>Animish</div>
 </div>
 
 <div class="process-indicator">
   <div class="process-unit">
     <div class="process-circle"></div>
-    <span class="process-text">Saturation</span>
+    <span class="process-text" style="background-color: green;">Saturation</span>
   </div>
   <div class="process-unit">
     <div class="process-circle"></div>
-    <span class="process-text">Spray</span>
+    <span class="process-text" style="background-color: white">Spray</span>
   </div>
   <div class="process-unit">
     <div class="process-circle"></div>
-    <span class="process-text">Scan</span>
+    <span class="process-text" style="background-color: white;">Scan</span>
   </div>
   <div class="process-unit">
     <div class="process-circle"></div>
-    <span class="process-text">Error/Completion</span>
+    <span class="process-text" style="background-color: white;">Error/Completion</span>
   </div>
 </div>
 
 <div class="button-container">
-  <button class="button" onclick="startStep()">Start Step</button>
+  <button class="button" onclick="startSpray()">Start Spray</button>
+  <button class="button" onclick="startScan()">Start Scan</button>
+  
   <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button>
 </div>
 
 <div class="results">
-  <p>Results</p>
+  <p class="result_text">""" + Results + """</p>
 </div>
 
 <script>
-  function startStep() {
+  function startSpray() {
     console.log('Starting step...');
   }
   
   function emergencyStop() {
     console.log('Emergency stop activated!');
   }
+ 
 </script>
 
 </body>
