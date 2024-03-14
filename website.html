@@ -141,20 +141,22 @@
 
 <div class="process-indicator"> <!--This HTML code is to display progress circles displaying our current stage of chromatography -->
   <div class="process-unit">
-    <div class="process-circle"></div>
-    <span class="process-text" style="background-color: green;">Saturation</span> 
+
+    <div class="process-circle" id="sat" style="background-color: yellow;"></div>
+    <span class="process-text" >Saturation</span>
+
   </div>
   <div class="process-unit">
-    <div class="process-circle"></div>
-    <span class="process-text" style="background-color: white">Spray</span>
+    <div class="process-circle" id="spray" ></div>
+    <span class="process-text">Spray</span>
   </div>
   <div class="process-unit">
-    <div class="process-circle"></div>
-    <span class="process-text" style="background-color: white;">Scan</span>
+    <div class="process-circle" id="scan"></div>
+    <span class="process-text" >Scan</span>
   </div>
   <div class="process-unit">
-    <div class="process-circle"></div>
-    <span class="process-text" style="background-color: white;">Error/Completion</span>
+    <div class="process-circle" id="error" ></div>
+    <span class="process-text" >Error/Completion</span>
   </div>
 </div>
 
@@ -166,17 +168,61 @@
 </div>
 
 <div class="results">
-  <p class="result_text">""" + Results + """</p> 
+
+  <p class="result-text">""" + Results + """</p> 
 </div> <!--This is the code to display our results. It will be linked to the micropython code to display the appropriate result-->
 
+
 <script>
+  
+    
+  
   function startSpray() {
-    console.log('Starting step...');
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'yellow';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'white';
+  }
+  function completion(){
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'green';
+  }
+  function startScan() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'yellow';
+    setTimeout(completion, 3000);
+    var element = document.getElementByClassName('results-text').innerText;
   }
   
   function emergencyStop() {
-    console.log('Emergency stop activated!');
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('error');
+    element.style.backgroundColor = 'red';
+      
+    
   }
+  // function completion(element){
+  //   function green(){
+  //     var element = document.getElementById('error');
+  //     element.style.backgroundColor = 'green'; 
+  //   }
+    
+  //   var resulted=data.
+  //   if (element!==resulted){
+  //      setTimeout(green,10000)
+  //   }
+  // }
  
 </script>
 </body>
