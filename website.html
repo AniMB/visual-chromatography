@@ -161,9 +161,10 @@
 </div>
 
 <div class="button-container"> <!-- Here is the code for each of the buttons to start each step-->
-  <button class="button" onclick="startSpray()">Start Spray</button>
-  <button class="button" onclick="startScan()">Start Scan</button>
-  
+  <div class="start-button-container" style="display:flex; justify-content:center; ">
+  <button class="button" style="margin-left: 500px;" onclick="startSpray()">Start Spray</button>
+  <button class="button" style="margin-right: 500px;"onclick="startScan()">Start Scan</button>
+  </div>
   <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button>
 </div>
 
@@ -176,7 +177,7 @@
 <script>
   
     
-  
+  // This code will create dynamic changes to the website based on button clicks. This first function is the code for the button start spraying
   function startSpray() {
     var element = document.getElementById('sat');
     element.style.backgroundColor = 'green';
@@ -184,11 +185,12 @@
     element.style.backgroundColor = 'yellow';
     var element = document.getElementById('scan');
     element.style.backgroundColor = 'white';
-  }
+  }//Helper
   function completion(){
     var element = document.getElementById('scan');
     element.style.backgroundColor = 'green';
   }
+  // Starts the second scan function. Contains timed elements.
   function startScan() {
     var element = document.getElementById('sat');
     element.style.backgroundColor = 'green';
@@ -199,7 +201,7 @@
     setTimeout(completion, 3000);
     var element = document.getElementByClassName('results-text').innerText;
   }
-  
+  // This code will stop all processes and all the circles shall turn red. The code to end the process will be filled in later.
   function emergencyStop() {
     var element = document.getElementById('sat');
     element.style.backgroundColor = 'red';
@@ -211,7 +213,8 @@
     element.style.backgroundColor = 'red';
       
     
-  }
+  } 
+  // In progress
   // function completion(element){
   //   function green(){
   //     var element = document.getElementById('error');
