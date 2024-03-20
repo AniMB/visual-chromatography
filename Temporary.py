@@ -5,15 +5,15 @@ import math
 
 thermistor = ADC(26) # Thermistors measure temperature based on resistance changes.
 
-light_sensor = ADC(27) # Light sensors measure light intensity.
+light_sensor = ADC(28) # Light sensors measure light intensity.
 
-data_collection_led = Pin(17, Pin.OUT) # This LED is used to illuminate the TLC plate for data collection.
+data_collection_led = Pin(12, Pin.OUT) # This LED is used to illuminate the TLC plate for data collection.
 
-actuator_leds = [Pin(i, Pin.OUT) for i in (14, 15, 16)] # These LEDs simulate various actuator states or stages in the experiment.
+actuator_leds = [Pin(i, Pin.OUT) for i in (13, 15, 14)] # These LEDs simulate various actuator states or stages in the experiment.
 
-ir_emitter = Pin(18, Pin.OUT) # The IR emitter sends an IR beam that the IR sensor can detect.
+ir_emitter = Pin(11, Pin.OUT) # The IR emitter sends an IR beam that the IR sensor can detect.
  
-ir_sensor = Pin(19, Pin.IN) # The IR sensor detects the IR beam from the IR emitter, used to determine paper position.
+ir_sensor = ADC(27) # The IR sensor detects the IR beam from the IR emitter, used to determine paper position.
 
 """Constants for calculating temperature from the thermistor's resistance."""
 B_CONSTANT = 3950  # The B constant of the thermistor, an empirical value specific to the thermistor.
