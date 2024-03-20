@@ -19,6 +19,8 @@ import usocket as socket
 import utime as time
 import _thread
 import json
+import math 
+from machine import Pin, ADC
 # -------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------
