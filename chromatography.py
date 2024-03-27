@@ -41,16 +41,16 @@ ir_sensor = machine.ADC(27) # The IR sensor detects the IR beam from the IR emit
 
 # provides the status of the ouptut
 def get_output_status():
-   if actuator_leds[0].value()==1:
-      if actuator_leds[1].value()==1:
-         if data_collection_led.value()==1:
-            if actuator_leds[2].value==1:
-              return light_intensity
-            return "Scanning"
+  if actuator_leds[0].value()==1:
+    if actuator_leds[1].value()==1:
+      if data_collection_led.value()==1:
+        if actuator_leds[2].value==1:
+          return light_intensity
+        return "Scanning"
 
-         return "Spraying"
-      return "Saturating"
-   
+      return "Spraying"
+    return "Saturating"
+  
 # new thermistor detection code which will detect a fluctuation in temperature.
 
 def interpret_thermistor():
@@ -153,7 +153,7 @@ def experiment_sequence():
 # --------------------------------------------------------------------------
 # Below given code should not be modified (except for the name of ssid and password). 
 # Create a network connection
-ssid = 'RPI_PICO_AP'       #Set access point name 
+ssid = 'Chemists'       #Set access point name 
 password = '12345678'      #Set your access point password
 ap = network.WLAN(network.AP_IF)
 ap.config(essid=ssid, password=password)
@@ -171,250 +171,250 @@ print(ap.ifconfig())
 # 
 # Define HTTP response
 def web_page():
-  results = get_output_status()
+  results = str(get_output_status())
     
  
 # Modify the html portion appropriately.
 # Style section below can be changed.
 # In the Script section some changes would be needed (mostly updating variable names and adding lines for extra elements). 
 
-  html = """<html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Chemists</title>
+  html = """
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Chemists</title>
 
-<style>
-  :root {
-    --primary-color: #007bff;
-    --hover-color: #0056b3;
-    --error-color: #ff4136;
-    --error-hover-color: #c2302a;
-    --background-color: #f4f4f4;
-    --text-color: #333;
-    --button-font-weight: bold;
-    --button-text-transform: uppercase;
-  }
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --hover-color: #0056b3;
+      --error-color: #ff4136;
+      --error-hover-color: #c2302a;
+      --background-color: #f4f4f4;
+      --text-color: #333;
+      --button-font-weight: bold;
+      --button-text-transform: uppercase;
+    }
 
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-  }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color);
+    }
 
-  .header {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
+    .header {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      align-items: center;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
 
-  .group-members, .results {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    justify-items: center;
-    align-items: center;
-    width: 90%;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border-radius: 8px;
-  }
+    .group-members, .results {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      justify-items: center;
+      align-items: center;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
 
-  .process-indicator {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    gap: 15px;
-    justify-items: center;
-    padding: 20px;
-  }
+    .process-indicator {
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 15px;
+      justify-items: center;
+      padding: 20px;
+    }
 
-  .process-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    .process-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  .process-circle {
-    width: 30px;
-    height: 30px;
-    border: 2px solid var(--primary-color);
-    border-radius: 50%;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.3s ease;
-  }
+    .process-circle {
+      width: 30px;
+      height: 30px;
+      border: 2px solid var(--primary-color);
+      border-radius: 50%;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
 
-  .process-circle:hover {
-    transform: scale(1.1);
-  }
+    .process-circle:hover {
+      transform: scale(1.1);
+    }
 
-  .process-text {
-    margin-top: 8px;
-    color: var(--primary-color);
-    font-size: 0.8em;
-    text-align: center;
-  }
+    .process-text {
+      margin-top: 8px;
+      color: var(--primary-color);
+      font-size: 0.8em;
+      text-align: center;
+    }
 
-  .button, .emergency-stop {
-    padding: 15px 30px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: var(--button-font-weight);
-    text-transform: var(--button-text-transform);
-    transition: background-color 0.3s ease;
-    display: block;
-    margin: 10px auto;
-  }
+    .button, .emergency-stop {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: var(--button-font-weight);
+      text-transform: var(--button-text-transform);
+      transition: background-color 0.3s ease;
+      display: block;
+      margin: 10px auto;
+    }
 
-  .button {
-    background-color: var(--primary-color);
-    color: white;
-  }
+    .button {
+      background-color: var(--primary-color);
+      color: white;
+    }
 
-  .button:hover {
-    background-color: var(--hover-color);
-  }
+    .button:hover {
+      background-color: var(--hover-color);
+    }
 
-  .emergency-stop {
-    background-color: var(--error-color);
-    color: white;
-  }
+    .emergency-stop {
+      background-color: var(--error-color);
+      color: white;
+    }
 
-  .emergency-stop:hover {
-    background-color: var(--error-hover-color);
-  }
+    .emergency-stop:hover {
+      background-color: var(--error-hover-color);
+    }
 
-  .results {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-</style>
-</head>
-<body>
+    .results {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  </style>
+  </head>
+  <body>
 
- <div class="header">
-  <h1 style="font-size: 1.2em; padding: 10px;"> Project Title
-</h1>
- </div>
-
-
-<div class="group-members">
-  <div>Rohann</div>
-  <div>Rohan</div>
-  <div>Animish</div>
-</div>
-
-<div class="process-indicator">
-  <div class="process-unit">
-    <div class="process-circle" id="sat" style="background-color: yellow;"></div>
-    <span class="process-text" >Saturation</span>
+  <div class="header">
+    <h1 style="font-size: 1.2em; padding: 10px;"> Project Title
+  </h1>
   </div>
-  <div class="process-unit">
-    <div class="process-circle" id="spray" ></div>
-    <span class="process-text">Spray</span>
-  </div>
-  <div class="process-unit">
-    <div class="process-circle" id="scan"></div>
-    <span class="process-text" >Scan</span>
-  </div>
-  <div class="process-unit">
-    <div class="process-circle" id="error" ></div>
-    <span class="process-text" >Completion</span>
-  </div>
-</div>
 
-<div class="button-container">
-  <div class="start-button-container" style="display:flex; justify-content:center; ">
-  <a href="/?spray"> <button class="button" style="margin-left: 500px;" onclick="startSpray()">Start Spray</button></a>
-  <a href="/?scan"></a><button class="button" style="margin-right: 500px;"onclick="startScan()">Start Scan</button></a>
-</div>
-  <a href="/?emergencystop"> <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button></a>
-</div>
 
-<div class="results">
-  <p class="result-text">""" + results + """</p>
-</div>
+  <div class="group-members">
+    <div>Rohann</div>
+    <div>Rohan</div>
+    <div>Animish</div>
+  </div>
 
-<script>
-  function updateStatus() {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-    
-  
-  function startSpray() {
-    var element = document.getElementById('sat');
-    element.style.backgroundColor = 'green';
-    var element = document.getElementById('spray');
-    element.style.backgroundColor = 'yellow';
-    var element = document.getElementById('scan');
-    element.style.backgroundColor = 'white';
-  }
-  function completion(){
-    var element = document.getElementById('scan');
-    element.style.backgroundColor = 'green';
-  }
-  function startScan() {
-    var element = document.getElementById('sat');
-    element.style.backgroundColor = 'green';
-    var element = document.getElementById('spray');
-    element.style.backgroundColor = 'green';
-    var element = document.getElementById('scan');
-    element.style.backgroundColor = 'yellow';
-    setTimeout(completion, 6000);
-    var element = document.getElementByClassName('results-text').innerText;
-    
-  }
-  
-  function emergencyStop() {
-    var element = document.getElementById('sat');
-    element.style.backgroundColor = 'red';
-    var element = document.getElementById('spray');
-    element.style.backgroundColor = 'red';
-    var element = document.getElementById('scan');
-    element.style.backgroundColor = 'red';
-    var element = document.getElementById('error');
-    element.style.backgroundColor = 'red';
+  <div class="process-indicator">
+    <div class="process-unit">
+      <div class="process-circle" id="sat" style="background-color: yellow;"></div>
+      <span class="process-text" >Saturation</span>
+    </div>
+    <div class="process-unit">
+      <div class="process-circle" id="spray" ></div>
+      <span class="process-text">Spray</span>
+    </div>
+    <div class="process-unit">
+      <div class="process-circle" id="scan"></div>
+      <span class="process-text" >Scan</span>
+    </div>
+    <div class="process-unit">
+      <div class="process-circle" id="error" ></div>
+      <span class="process-text" >Completion</span>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <div class="start-button-container" style="display:flex; justify-content:center; ">
+     <button class="button" style="margin-left: 500px;" onclick="startSpray()">Start Spray</button>
+    <button class="button" style="margin-right: 500px;"onclick="startScan()">Start Scan</button></a>
+  </div>
+     <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button>
+  </div>
+
+  <div class="results">
+    <p class="result-text">""" + results + """</p>
+  </div>
+
+  <script>
+    function updateStatus() {
+              var xhr = new XMLHttpRequest();
+              xhr.onreadystatechange = function() {
+                  if (xhr.readyState == 4 && xhr.status == 200) {
       
     
-  }
-  function completion(element){
-    function green(){
+    function startSpray() {
+      var element = document.getElementById('sat');
+      element.style.backgroundColor = 'green';
+      var element = document.getElementById('spray');
+      element.style.backgroundColor = 'yellow';
+      var element = document.getElementById('scan');
+      element.style.backgroundColor = 'white';
+    }
+    function completion(){
+      var element = document.getElementById('scan');
+      element.style.backgroundColor = 'green';
+    }
+    function startScan() {
+      var element = document.getElementById('sat');
+      element.style.backgroundColor = 'green';
+      var element = document.getElementById('spray');
+      element.style.backgroundColor = 'green';
+      var element = document.getElementById('scan');
+      element.style.backgroundColor = 'yellow';
+      setTimeout(completion, 6000);
+      var element = document.getElementByClassName('results-text').innerText;
+      
+    }
+    
+    function emergencyStop() {
+      var element = document.getElementById('sat');
+      element.style.backgroundColor = 'red';
+      var element = document.getElementById('spray');
+      element.style.backgroundColor = 'red';
+      var element = document.getElementById('scan');
+      element.style.backgroundColor = 'red';
       var element = document.getElementById('error');
-      element.style.backgroundColor = 'green'; 
+      element.style.backgroundColor = 'red';
+        
+      
     }
-      var resulted=data.
-    if (element!==resulted){
-       setTimeout(green,10000)
+    function completion(element){
+      function green(){
+        var element = document.getElementById('error');
+        element.style.backgroundColor = 'green'; 
+      }
+        var resulted=data.
+      if (element!==resulted){
+        setTimeout(green,10000)
+      }
     }
-  }
-  }
-  }
-  }
-  }
-            };
-            xhr.open("GET", "/status", true);
-            xhr.send();
-        }
-        setInterval(updateStatus, 1000); // Refresh every 1 second
- 
-</script>
+    }
+    }
+    }
+    }
+              };
+              xhr.open("GET", "/status", true);
+              xhr.send();
+          }
+          setInterval(updateStatus, 1000); // Refresh every 1 second
+  
+  </script>
 
-</body>
-</html>"""
+  </body>
+  </html>"""
   return html
 # --------------------------------------------------------------------
 # This section could be tweaked to return status of multiple sensors or actuators.
@@ -466,18 +466,12 @@ while True:
 #         redLED_pin.value(0)
 
 # this part of the code remains as it is. 
-    if request.find("/status") == 6:
-        response = get_status()
-        conn.send("HTTP/1.1 200 OK\n")
-        conn.send("Content-Type: application/json\n")
-        conn.send("Connection: close\n\n")
-        conn.sendall(response)
-    else:
-        response = web_page()
-        conn.send("HTTP/1.1 200 OK\n")
-        conn.send("Content-Type: text/html\n")
-        conn.send("Connection: close\n\n")
-        conn.sendall(response)
+    
+    response = web_page()
+    conn.send("HTTP/1.1 200 OK\n")
+    conn.send("Content-Type: text/html\n")
+    conn.send("Connection: close\n\n")
+    conn.sendall(response)
     conn.close()
 
 
