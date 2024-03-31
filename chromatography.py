@@ -19,6 +19,7 @@ import usocket as socket
 import utime as time
 import _thread
 import json
+
 # -------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------
@@ -67,24 +68,25 @@ def interpret_thermistor():
 def read_light_intensity():
 
   """Read the raw analog value from the light sensor, which is proportional to the light intensity, then decide which colour it matches up with."""
-  colour=''
+  
   while light_sensor.read_u16() > 50000:
-      if (light_sensor.read_u16() >19600 and light_sensor.read_u16() <20200):
-          colour="blue"
-          return "blue"
-      elif(light_sensor.read_u16() > 29000 and light_sensor.read_u16() <29600):
-          colour="red-pink"
-          return "red-pink"
-      elif(light_sensor.read_u16() > 34500 and light_sensor.read_u16() <34900):
-          colour="pink"
-          return "pink"
-      elif(light_sensor.read_u16() > 32000 and light_sensor.read_u16() <32800):
-          colour="yellow"
-          return "yellow"
-      elif(light_sensor.read_u16() > 33400 and light_sensor.read_u16() <34200):
-          colour="white"
-          return "white"
-  return colour
+    colour=''
+    if (light_sensor.read_u16() >19600 and light_sensor.read_u16() <20200):
+        colour="blue"
+        return "blue"
+    elif(light_sensor.read_u16() > 29000 and light_sensor.read_u16() <29600):
+        colour="red-pink"
+        return "red-pink"
+    elif(light_sensor.read_u16() > 34500 and light_sensor.read_u16() <34900):
+        colour="pink"
+        return "pink"
+    elif(light_sensor.read_u16() > 32000 and light_sensor.read_u16() <32800):
+        colour="yellow"
+        return "yellow"
+    elif(light_sensor.read_u16() > 33400 and light_sensor.read_u16() <34200):
+        colour="white"
+        return "white"
+    return colour
 
 def toggle_data_collection_led(state):
   """Set the state of the data collection LED: 1 for on, 0 for off."""
@@ -342,68 +344,70 @@ def web_page():
     <div class="start-button-container" style="display:flex; justify-content:center; ">
      <button class="button" style="margin-left: 500px;" onclick="startSpray()">Start Spray</button>
     <button class="button" style="margin-right: 500px;"onclick="startScan()">Start Scan</button></a>
-  </div><a href="/?error>
-     <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button></a>
+  </div>
+     <button class="emergency-stop" onclick="emergencyStop()"><a href="/?error">Emergency Stop</a></button>
   </div>
 
   <div class="results">
-    <p class="result-text">Results</p>
+    <p id="result-text">Results</p>
   </div>
 
   <script>
    
- function updateStatus() {
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        var results = JSON.parse(xhr.responseText);
-        var results_element = document.querySelector(".results-text");
-        results_element.textContent = results.output_status;
-        document.getElementById('error').style.backgroundColor=data.completion_status==="on"? "green":"yellow";
-      }
-    }
-  };
- xhr.open("GET", "/status", true);
- xhr.send();
-          
-    function startSpray() {
-      var element = document.getElementById('sat');
-      element.style.backgroundColor = 'green';
-      var element = document.getElementById('spray');
-      element.style.backgroundColor = 'yellow';
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'white';
-    }
-    function completion(){
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'green';
-    }
-    function startScan() {
-      var element = document.getElementById('sat');
-      element.style.backgroundColor = 'green';
-      var element = document.getElementById('spray');
-      element.style.backgroundColor = 'green';
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'yellow';
-      setTimeout(completion, 6000);
-      
-      
-      
-    }
-    
-    function emergencyStop() {
-      var element = document.getElementById('sat');
-      element.style.backgroundColor = 'red';
-      var element = document.getElementById('spray');
-      element.style.backgroundColor = 'red';
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'red';
-      var element = document.getElementById('error');
-      element.style.backgroundColor = 'red';
+  function updateStatus() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var results = JSON.parse(xhr.responseText);
+          var results_element = document.getElementById("results-text");
+          results_element.innerHTML = results.output_status;
+          document.getElementById('error').style.backgroundColor=results.completion_status=="on"? "green":"yellow";
+
         
+      }
+    };
+    xhr.open("GET", "/status", true);
+    xhr.send();
+  }
+        
+  function startSpray() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'yellow';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'white';
+  }
+  function completion(){
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'green';
+  }
+  function startScan() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'yellow';
+    setTimeout(completion, 6000);
+    
       
-    }
-    setInterval(updateStatus, 1000); // Refresh every 1 second
+      
+  }
+    
+  function emergencyStop() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('error');
+    element.style.backgroundColor = 'red';
+      
+    
+  }
+  setInterval(updateStatus, 1000); // Refresh every 1 second
   
   </script>
 
@@ -418,7 +422,7 @@ def web_page():
 def get_status():
     status = {
        "output_status":get_output_status(),
-       "completion_status":colour_error(),
+       "completion_status":colour_error()
         
 
         # You will add lines of code if status of more sensors is needed.
