@@ -19,6 +19,7 @@ import usocket as socket
 import utime as time
 import _thread
 import json
+
 # -------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------
@@ -44,7 +45,7 @@ def get_output_status():
   if actuator_leds[0].value()==1:
     if actuator_leds[1].value()==1:
       if data_collection_led.value()==1:
-        if actuator_leds[2].value==1:
+        if actuator_leds[2].value()==1:
           return light_intensity
         return "Scanning"
 
@@ -52,7 +53,9 @@ def get_output_status():
     return "Saturating"
   
 # new thermistor detection code which will detect a fluctuation in temperature.
-
+def colour_error():
+   if data_collection_led.value()==1:
+      return "on"
 def interpret_thermistor():
   temp_thermistor_value = thermistor.read_u16()
   time.sleep(1)
@@ -65,24 +68,25 @@ def interpret_thermistor():
 def read_light_intensity():
 
   """Read the raw analog value from the light sensor, which is proportional to the light intensity, then decide which colour it matches up with."""
-  colour=''
+  
   while light_sensor.read_u16() > 50000:
-      if (light_sensor.read_u16() >19600 and light_sensor.read_u16() <20200):
-          colour="blue"
-          return "blue"
-      elif(light_sensor.read_u16() > 29000 and light_sensor.read_u16() <29600):
-          colour="red-pink"
-          return "red-pink"
-      elif(light_sensor.read_u16() > 34500 and light_sensor.read_u16() <34900):
-          colour="pink"
-          return "pink"
-      elif(light_sensor.read_u16() > 32000 and light_sensor.read_u16() <32800):
-          colour="yellow"
-          return "yellow"
-      elif(light_sensor.read_u16() > 33400 and light_sensor.read_u16() <34200):
-          colour="white"
-          return "white"
-  return colour
+    colour=''
+    if (light_sensor.read_u16() >19600 and light_sensor.read_u16() <20200):
+        colour="blue"
+        return "blue"
+    elif(light_sensor.read_u16() > 29000 and light_sensor.read_u16() <29600):
+        colour="red-pink"
+        return "red-pink"
+    elif(light_sensor.read_u16() > 34500 and light_sensor.read_u16() <34900):
+        colour="pink"
+        return "pink"
+    elif(light_sensor.read_u16() > 32000 and light_sensor.read_u16() <32800):
+        colour="yellow"
+        return "yellow"
+    elif(light_sensor.read_u16() > 33400 and light_sensor.read_u16() <34200):
+        colour="white"
+        return "white"
+    return colour
 
 def toggle_data_collection_led(state):
   """Set the state of the data collection LED: 1 for on, 0 for off."""
@@ -171,7 +175,7 @@ print(ap.ifconfig())
 # 
 # Define HTTP response
 def web_page():
-  results = str(get_output_status())
+
     
  
 # Modify the html portion appropriately.
@@ -341,75 +345,69 @@ def web_page():
      <button class="button" style="margin-left: 500px;" onclick="startSpray()">Start Spray</button>
     <button class="button" style="margin-right: 500px;"onclick="startScan()">Start Scan</button></a>
   </div>
-     <button class="emergency-stop" onclick="emergencyStop()">Emergency Stop</button>
+     <button class="emergency-stop" onclick="emergencyStop()"><a href="/?error">Emergency Stop</a></button>
   </div>
 
   <div class="results">
-    <p class="result-text">""" + results + """</p>
+    <p id="result-text">Results</p>
   </div>
 
   <script>
-    function updateStatus() {
-              var xhr = new XMLHttpRequest();
-              xhr.onreadystatechange = function() {
-                  if (xhr.readyState == 4 && xhr.status == 200) {
-      
-    
-    function startSpray() {
-      var element = document.getElementById('sat');
-      element.style.backgroundColor = 'green';
-      var element = document.getElementById('spray');
-      element.style.backgroundColor = 'yellow';
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'white';
-    }
-    function completion(){
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'green';
-    }
-    function startScan() {
-      var element = document.getElementById('sat');
-      element.style.backgroundColor = 'green';
-      var element = document.getElementById('spray');
-      element.style.backgroundColor = 'green';
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'yellow';
-      setTimeout(completion, 6000);
-      var element = document.getElementByClassName('results-text').innerText;
-      
-    }
-    
-    function emergencyStop() {
-      var element = document.getElementById('sat');
-      element.style.backgroundColor = 'red';
-      var element = document.getElementById('spray');
-      element.style.backgroundColor = 'red';
-      var element = document.getElementById('scan');
-      element.style.backgroundColor = 'red';
-      var element = document.getElementById('error');
-      element.style.backgroundColor = 'red';
+   
+  function updateStatus() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var results = JSON.parse(xhr.responseText);
+          var results_element = document.getElementById("results-text");
+          results_element.innerHTML = results.output_status;
+          document.getElementById('error').style.backgroundColor=results.completion_status=="on"? "green":"yellow";
+
         
+      }
+    };
+    xhr.open("GET", "/status", true);
+    xhr.send();
+  }
+        
+  function startSpray() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'yellow';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'white';
+  }
+  function completion(){
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'green';
+  }
+  function startScan() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'green';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'yellow';
+    setTimeout(completion, 6000);
+    
       
-    }
-    function completion(element){
-      function green(){
-        var element = document.getElementById('error');
-        element.style.backgroundColor = 'green'; 
-      }
-        var resulted=data.
-      if (element!==resulted){
-        setTimeout(green,10000)
-      }
-    }
-    }
-    }
-    }
-    }
-              };
-              xhr.open("GET", "/status", true);
-              xhr.send();
-          }
-          setInterval(updateStatus, 1000); // Refresh every 1 second
+      
+  }
+    
+  function emergencyStop() {
+    var element = document.getElementById('sat');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('spray');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('scan');
+    element.style.backgroundColor = 'red';
+    var element = document.getElementById('error');
+    element.style.backgroundColor = 'red';
+      
+    
+  }
+  setInterval(updateStatus, 1000); // Refresh every 1 second
   
   </script>
 
@@ -423,7 +421,8 @@ def web_page():
 # The function retuns status. 
 def get_status():
     status = {
-        
+       "output_status":get_output_status(),
+       "completion_status":colour_error()
         
 
         # You will add lines of code if status of more sensors is needed.
@@ -454,24 +453,29 @@ while True:
     if request:
         request = str(request)
         print('Content = %s' % request)
-        LED_on = request.find('/?redLED_pin=on') # this part of the code could be modified
-        LED_off = request.find('/?redLED_pin=off') # this part of the code could be modified
+        LED_on = request.find('/?error') # this part of the code could be modified
         
-# # this part of the code could be modified
-#     if LED_on == 6: 
-#         print('LED ON')
-#         redLED_pin.value(1)
-#     elif LED_off == 6:
-#         print('LED OFF')
-#         redLED_pin.value(0)
+        
+# this part of the code could be modified
+    if LED_on == 6: 
+      print('Emergency Stop')
+      exit()
+    
 
 # this part of the code remains as it is. 
     
-    response = web_page()
-    conn.send("HTTP/1.1 200 OK\n")
-    conn.send("Content-Type: text/html\n")
-    conn.send("Connection: close\n\n")
-    conn.sendall(response)
+    if request.find("/status") == 6:
+        response = get_status()
+        conn.send("HTTP/1.1 200 OK\n")
+        conn.send("Content-Type: application/json\n")
+        conn.send("Connection: close\n\n")
+        conn.sendall(response)
+    else:
+        response = web_page()
+        conn.send("HTTP/1.1 200 OK\n")
+        conn.send("Content-Type: text/html\n")
+        conn.send("Connection: close\n\n")
+        conn.sendall(response)
     conn.close()
 
 
