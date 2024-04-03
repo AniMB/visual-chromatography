@@ -25,7 +25,7 @@ import json
 # -------------------------------------------------------------------------
 
 # The below portion of the code is to be tweaked based on your needs. 
-light_intensity=''
+light_intensity=""
 # Configure GP14 as output and define it as redLED_pin 
 data_collection_led = machine.Pin(12, machine.Pin.OUT) # This LED is used to illuminate the TLC plate for data collection.
 
@@ -50,11 +50,11 @@ def get_output_status():
         return "Scanning"
 
       return "Spraying"
-  return "Saturating"
+    return "Saturating"
   
 # new thermistor detection code which will detect a fluctuation in temperature.
 def colour_error():
-   if data_collection_led.value()==1:
+   if actuator_leds[2].value()==1:
       return "on"
 def interpret_thermistor():
   temp_thermistor_value = thermistor.read_u16()
@@ -69,28 +69,28 @@ def read_light_intensity():
 
   """Read the raw analog value from the light sensor, which is proportional to the light intensity, then decide which colour it matches up with."""
   
-  colour = ""
+  
 
   while light_sensor.read_u16() > 40000 or light_sensor.read_u16() < 10000:
     time.sleep(0.2)
   
   if (light_sensor.read_u16() >10000 and light_sensor.read_u16() <24600):
-    colour = "blue"
+    
     return "blue"
   elif(light_sensor.read_u16() > 24600 and light_sensor.read_u16() <30800):
-    colour = "red-pink"
+    
     return "red-pink"
   elif(light_sensor.read_u16() > 34350 and light_sensor.read_u16() <40000):
-    colour = "pink"
+    
     return "pink"
   elif(light_sensor.read_u16() > 30800 and light_sensor.read_u16() <33100):
-    colour = "yellow"
+    
     return "yellow"
   elif(light_sensor.read_u16() > 33100 and light_sensor.read_u16() <34350):
-    colour = "white"
+    
     return "white"
   else:
-    colour = "void"
+    
     return "void"
 
 def toggle_data_collection_led(state):
@@ -145,7 +145,7 @@ def experiment_sequence():
   light_intensity= read_light_intensity()
   print("Light intensity/colour: ", light_intensity)
   time.sleep(1)
-  toggle_data_collection_led(0)  # Turn off the data collection LED after reading the light intensity.
+  # toggle_data_collection_led(0)  # Turn off the data collection LED after reading the light intensity.
   
   # Activate an actuator LED to indicate completion of experiment
   activate_actuator_led(2, 1)
@@ -154,8 +154,7 @@ def experiment_sequence():
   print("Experiment complete.")
 
   time.sleep(10)
-  reset_leds()
-
+ 
 
 # --------------------------------------------------------------------------
 
@@ -315,7 +314,7 @@ def web_page():
   <body>
 
   <div class="header">
-    <h1 style="font-size: 1.2em; padding: 10px;"> Project Title
+    <h1 style="font-size: 1.2em; padding: 10px;"> Automated Visual Chrmatography
   </h1>
   </div>
 
@@ -464,6 +463,8 @@ while True:
 # this part of the code could be modified
     if LED_on == 6: 
       print('Emergency Stop')
+      reset_leds()
+      data_collection_led.value(0)
       exit()
     
 
