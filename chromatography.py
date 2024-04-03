@@ -25,7 +25,7 @@ import json
 # -------------------------------------------------------------------------
 
 # The below portion of the code is to be tweaked based on your needs. 
-light_intensity=""
+light_intensity="" # this is the variable that holds the value of the colour of the light read. Its is the virtual LED
 # Configure GP14 as output and define it as redLED_pin 
 data_collection_led = machine.Pin(12, machine.Pin.OUT) # This LED is used to illuminate the TLC plate for data collection.
 
@@ -40,7 +40,7 @@ ir_sensor = machine.ADC(27) # The IR sensor detects the IR beam from the IR emit
 
 
 
-# provides the status of the ouptut
+# provides the status of the ouptut. Determines the colour of the buttons online
 def get_output_status():
   if actuator_leds[0].value()==1:
     if actuator_leds[1].value()==1:
@@ -52,10 +52,11 @@ def get_output_status():
       return "Spraying"
     return "Saturating"
   
-# new thermistor detection code which will detect a fluctuation in temperature.
+# this code will be sent to the JSON function. Its used for signalling completion
 def colour_error():
    if actuator_leds[2].value()==1:
       return "on"
+# new thermistor detection code which will detect a fluctuation in temperature.
 def interpret_thermistor():
   temp_thermistor_value = thermistor.read_u16()
   time.sleep(1)
@@ -139,7 +140,7 @@ def experiment_sequence():
   activate_actuator_led(1, 1)  # Example: Turn on the first actuator LED.
   time.sleep(3)
   # Illuminate the TLC plate with the data collection LED and read the light intensity from the light sensor.
-  toggle_data_collection_led(1)  # Turn on the data collection LED.
+  toggle_data_collection_led(1)  # Turn on the data collection LED. Which is the actuator for starting the scanning process.
   print("Collecting data")
   global light_intensity
   light_intensity= read_light_intensity()
@@ -357,20 +358,20 @@ def web_page():
   </div>
 
   <script>
-   
+  // continuously checks the code to update it. Takes in the json and is useful for communication. 
   function updateStatus() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
-          var results = JSON.parse(xhr.responseText);
+          var results = JSON.parse(xhr.responseText); // The values are parsed here
           var results_element = document.getElementById("results-text");
           results_element.innerHTML = results.output_status;
-          document.getElementById('error').style.backgroundColor=results.completion_status=="on"? "green":"yellow";
+          document.getElementById('error').style.backgroundColor=results.completion_status=="on"? "green":"yellow"; // Completion marked
 
         
       }
     };
-    xhr.open("GET", "/status", true);
+    xhr.open("GET", "/status", true); //used for starting functions later
     xhr.send();
   }
         
