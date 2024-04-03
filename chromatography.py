@@ -42,14 +42,14 @@ ir_sensor = machine.ADC(27) # The IR sensor detects the IR beam from the IR emit
 
 # provides the status of the ouptut
 def get_output_status():
-  # if actuator_leds[0].value()==1:
-  #   if actuator_leds[1].value()==1:
-  #     if data_collection_led.value()==1:
-  #       if actuator_leds[2].value()==1:
-  #         return light_intensity
-  #       return "Scanning"
+  if actuator_leds[0].value()==1:
+    if actuator_leds[1].value()==1:
+      if data_collection_led.value()==1:
+        if actuator_leds[2].value()==1:
+          return light_intensity
+        return "Scanning"
 
-  #     return "Spraying"
+      return "Spraying"
   return "Saturating"
   
 # new thermistor detection code which will detect a fluctuation in temperature.
@@ -59,7 +59,7 @@ def colour_error():
 def interpret_thermistor():
   temp_thermistor_value = thermistor.read_u16()
   time.sleep(1)
-  if ((temp_thermistor_value - thermistor.read_u16()) > 1000) or ((temp_thermistor_value - thermistor.read_u16()) < -1000):
+  if ((temp_thermistor_value - thermistor.read_u16()) > 500) or ((temp_thermistor_value - thermistor.read_u16()) < -500):
       return True
   else:
       return False
@@ -69,24 +69,29 @@ def read_light_intensity():
 
   """Read the raw analog value from the light sensor, which is proportional to the light intensity, then decide which colour it matches up with."""
   
-  while light_sensor.read_u16() > 50000:
-    colour=''
-    if (light_sensor.read_u16() >19600 and light_sensor.read_u16() <20200):
-        colour="blue"
-        return "blue"
-    elif(light_sensor.read_u16() > 29000 and light_sensor.read_u16() <29600):
-        colour="red-pink"
-        return "red-pink"
-    elif(light_sensor.read_u16() > 34500 and light_sensor.read_u16() <34900):
-        colour="pink"
-        return "pink"
-    elif(light_sensor.read_u16() > 32000 and light_sensor.read_u16() <32800):
-        colour="yellow"
-        return "yellow"
-    elif(light_sensor.read_u16() > 33400 and light_sensor.read_u16() <34200):
-        colour="white"
-        return "white"
-    return colour
+  colour = ""
+
+  while light_sensor.read_u16() > 40000 or light_sensor.read_u16() < 10000:
+    time.sleep(0.2)
+  
+  if (light_sensor.read_u16() >10000 and light_sensor.read_u16() <24600):
+    colour = "blue"
+    return "blue"
+  elif(light_sensor.read_u16() > 24600 and light_sensor.read_u16() <30800):
+    colour = "red-pink"
+    return "red-pink"
+  elif(light_sensor.read_u16() > 34350 and light_sensor.read_u16() <40000):
+    colour = "pink"
+    return "pink"
+  elif(light_sensor.read_u16() > 30800 and light_sensor.read_u16() <33100):
+    colour = "yellow"
+    return "yellow"
+  elif(light_sensor.read_u16() > 33100 and light_sensor.read_u16() <34350):
+    colour = "white"
+    return "white"
+  else:
+    colour = "void"
+    return "void"
 
 def toggle_data_collection_led(state):
   """Set the state of the data collection LED: 1 for on, 0 for off."""
@@ -138,7 +143,7 @@ def experiment_sequence():
   print("Collecting data")
   global light_intensity
   light_intensity= read_light_intensity()
-  print(f"Light intensity/colour: {light_intensity}")
+  print("Light intensity/colour: ", light_intensity)
   time.sleep(1)
   toggle_data_collection_led(0)  # Turn off the data collection LED after reading the light intensity.
   
