@@ -42,15 +42,15 @@ ir_sensor = machine.ADC(27) # The IR sensor detects the IR beam from the IR emit
 
 # provides the status of the ouptut
 def get_output_status():
-  if actuator_leds[0].value()==1:
-    if actuator_leds[1].value()==1:
-      if data_collection_led.value()==1:
-        if actuator_leds[2].value()==1:
-          return light_intensity
-        return "Scanning"
+  # if actuator_leds[0].value()==1:
+  #   if actuator_leds[1].value()==1:
+  #     if data_collection_led.value()==1:
+  #       if actuator_leds[2].value()==1:
+  #         return light_intensity
+  #       return "Scanning"
 
-      return "Spraying"
-    return "Saturating"
+  #     return "Spraying"
+  return "Saturating"
   
 # new thermistor detection code which will detect a fluctuation in temperature.
 def colour_error():
@@ -349,7 +349,7 @@ def web_page():
   </div>
 
   <div class="results">
-    <p id="result-text">Results</p>
+    <p id="results-text">Results</p>
   </div>
 
   <script>
@@ -477,5 +477,3 @@ while True:
         conn.send("Connection: close\n\n")
         conn.sendall(response)
     conn.close()
-
-
