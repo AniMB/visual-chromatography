@@ -194,7 +194,8 @@ def web_page():
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Chemists</title>
 
-  <style>
+  <!--The following css code is to alter the look and colour of the website to make it more professional and colour code the outputs -->
+  <style> 
     :root {
       --primary-color: #007bff;
       --hover-color: #0056b3;
@@ -320,13 +321,13 @@ def web_page():
   </div>
 
 
-  <div class="group-members">
+  <div class="group-members"> <!--This is a div class to add our names to the website-->
     <div>Rohann</div>
     <div>Rohan</div>
     <div>Animish</div>
   </div>
 
-  <div class="process-indicator">
+  <div class="process-indicator"> <!--This HTML code is to display progress circles displaying our current stage of chromatography -->
     <div class="process-unit">
       <div class="process-circle" id="sat" style="background-color: yellow;"></div>
       <span class="process-text" >Saturation</span>
@@ -345,7 +346,7 @@ def web_page():
     </div>
   </div>
 
-  <div class="button-container">
+  <div class="button-container"> <!-- Here is the code for each of the buttons to start each step-->
     <div class="start-button-container" style="display:flex; justify-content:center; ">
      <button class="button" style="margin-left: 500px;" onclick="startSpray()">Start Spray</button>
     <button class="button" style="margin-right: 500px;"onclick="startScan()">Start Scan</button></a>
@@ -355,7 +356,7 @@ def web_page():
 
   <div class="results">
     <p id="results-text">Results</p>
-  </div>
+  </div> <!--This is the code to display our results. It is linked to the micropython code to display the appropriate result-->
 
   <script>
   // continuously checks the code to update it. Takes in the json and is useful for communication. 
@@ -374,7 +375,8 @@ def web_page():
     xhr.open("GET", "/status", true); //used for starting functions later
     xhr.send();
   }
-        
+
+  // This code will create dynamic changes to the website based on button clicks. This first function is the code for the button start spraying
   function startSpray() {
     var element = document.getElementById('sat');
     element.style.backgroundColor = 'green';
@@ -382,11 +384,12 @@ def web_page():
     element.style.backgroundColor = 'yellow';
     var element = document.getElementById('scan');
     element.style.backgroundColor = 'white';
-  }
+  }//Helper
   function completion(){
     var element = document.getElementById('scan');
     element.style.backgroundColor = 'green';
-  }
+    
+  }  // Starts the second scan function. Contains timed elements.
   function startScan() {
     var element = document.getElementById('sat');
     element.style.backgroundColor = 'green';
@@ -399,7 +402,8 @@ def web_page():
       
       
   }
-    
+
+  // This code will stop all processes and all the circles shall turn red. The code to end the process will be filled in later.
   function emergencyStop() {
     var element = document.getElementById('sat');
     element.style.backgroundColor = 'red';
